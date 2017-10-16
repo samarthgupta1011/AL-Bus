@@ -3,14 +3,15 @@ package com.example.punyaaachman.albus.Activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.punyaaachman.albus.POJO.GlobalVariables;
+import com.example.punyaaachman.albus.POJO.Trips;
 import com.example.punyaaachman.albus.R;
 
 import java.io.File;
@@ -19,18 +20,26 @@ import java.util.Date;
 
 public class TicketActivity extends AppCompatActivity {
     TextView tvFrom, tvTo, tvAmount;
+    Button btScreenshot,btProceed;
 
-    Button btScreenshot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket);
 
         btScreenshot = (Button) findViewById(R.id.bt_ss);
+        btProceed= (Button) findViewById(R.id.bt_proceed);
         btScreenshot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takeScreenshot();
+            }
+        });
+        btProceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),HomeActivity.class));
             }
         });
 
@@ -38,22 +47,18 @@ public class TicketActivity extends AppCompatActivity {
         tvTo = (TextView) findViewById(R.id.tvToR);
         tvAmount = (TextView) findViewById(R.id.tvAmountR);
 
+
         tvFrom.setText(GlobalVariables.b);
         tvTo.setText(GlobalVariables.d);
-        tvAmount.setText(String.valueOf(GlobalVariables.price));
+        tvAmount.setText(String.valueOf("Rs. " + GlobalVariables.price));
 
-        startService(new Intent(TicketActivity.this,MapService.class));
+//        Intent serviceIntent = new Intent(this,DefaulterService.class);
+//        startService(serviceIntent);
+
+       // startService(new Intent(TicketActivity.this, MapService.class));
 
     }
 
-    public void startService(View view) {
-        startService(new Intent(getBaseContext(), MapService.class));
-    }
-
-    // Method to stop the service
-    public void stopService(View view) {
-        stopService(new Intent(getBaseContext(), MapService.class));
-    }
 
 
     private void takeScreenshot() {
@@ -86,6 +91,7 @@ public class TicketActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void openScreenshot(File imageFile) {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
